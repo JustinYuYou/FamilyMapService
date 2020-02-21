@@ -12,7 +12,7 @@ public class Database {
 
     //Whenever we want to make a change to our database we will have to open a connection and use
     //Statements created by that connection to initiate transactions
-    public Connection openConnection() throws DataAccessException, SQLException {
+    public Connection openConnection() throws DataAccessException{
         try {
             //The Structure for this Connection is driver:language:path
             //The path assumes you start in the root of your project unless given a non-relative path
@@ -26,7 +26,11 @@ public class Database {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             if(connection != null) {
-                connection.rollback();
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
             throw new DataAccessException("Unable to open connection to database");
         }
@@ -34,7 +38,7 @@ public class Database {
         return connection;
     }
 
-    public Connection getConnection() throws DataAccessException, SQLException {
+    public Connection getConnection() throws DataAccessException {
         if(connection == null) {
             return openConnection();
         } else {

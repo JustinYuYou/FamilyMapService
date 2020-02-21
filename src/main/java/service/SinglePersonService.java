@@ -23,7 +23,7 @@ public class SinglePersonService {
             personDao = new PersonDao(db.openConnection());
             person = personDao.findPerson(personID);
             db.closeConnection(true);
-        } catch (DataAccessException | SQLException e) {
+        } catch (DataAccessException e) {
            System.out.println(e);
             try {
                 db.closeConnection(false);

@@ -10,7 +10,7 @@ import java.sql.*;
 /**
  * Database access object for User object. It allows to retrieve, insert, update, and delete user
  */
-public class UserDao{
+public class UserDao {
     private Connection connection;
 
     public UserDao(Connection connection) {
@@ -19,9 +19,10 @@ public class UserDao{
 
     /**
      * Retrieve a user from the database.
+     *
      * @param username the username
-     * @throws SQLException if an SQL error occurs
      * @return the user
+     * @throws SQLException if an SQL error occurs
      */
     public User findUser(String username) throws DataAccessException {
 
@@ -36,7 +37,7 @@ public class UserDao{
 
             rs = stmt.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 String userName = rs.getString(1);
                 String personID = rs.getString(2);
                 String password = rs.getString(3);
@@ -51,14 +52,14 @@ public class UserDao{
         } catch (SQLException e) {
             throw new DataAccessException("Error encountered while finding a user on the database");
         } finally {
-            if(rs != null){
+            if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(stmt != null){
+            if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
@@ -96,15 +97,17 @@ public class UserDao{
 //
 //        }
     }
+
     /**
      * Add a user on the database
+     *
      * @param user the user to be inserted
      * @throws SQLException if an SQL error occurs
      */
     public void insertUser(User user) throws DataAccessException, SQLException {
         String sql = "insert into User (userName, personID," +
-                    "password, email, firstName, lastName, gender) " +
-                    "values (?,?,?,?,?,?,?)";
+                "password, email, firstName, lastName, gender) " +
+                "values (?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
             //to fill in and give it a proper value. The first argument corresponds to the first
@@ -126,18 +129,20 @@ public class UserDao{
 
     /**
      * Delete one of the users from the database
+     *
      * @param username the user to be delted
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteUser(String username) throws SQLException{
+    public void deleteUser(String username) throws SQLException {
 
     }
 
     /**
      * Delete all the users from the database
+     *
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteAllUsers() throws SQLException{
+    public void deleteAllUsers() throws SQLException {
         PreparedStatement stmt = null;
 
         try {
@@ -148,7 +153,7 @@ public class UserDao{
 
             System.out.printf("Deleted %d users\n", count);
         } finally {
-            if(stmt != null){
+            if (stmt != null) {
                 stmt.close();
             }
         }

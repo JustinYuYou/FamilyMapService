@@ -31,7 +31,7 @@ public class EventDao {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        Event event = null;
+        Event event;
         try {
             String sql = "select eventID, associatedUsername, personID, latitude, " +
                     "longitude, country, city, eventType, year from Event where eventID = " + eventID;

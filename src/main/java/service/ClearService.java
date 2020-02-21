@@ -1,6 +1,10 @@
 package service;
 
+import dao.Database;
+import databaseAccessException.DataAccessException;
 import response.ClearResponse;
+
+import java.sql.SQLException;
 
 /**
  * URL Path: /clear
@@ -9,6 +13,27 @@ import response.ClearResponse;
  */
 public class ClearService {
     public ClearResponse clear() {
-        return null;
+        Database db = new Database();
+        boolean success = true;
+
+        try {
+            db.openConnection();
+            db.clearTables();
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            try {
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
+            success = false;
+        }
+
+        if (success) {
+            return new ClearResponse("Clear succeeded.", true);
+        } else {
+            return new ClearResponse("Internal server error", false);
+        }
     }
 }

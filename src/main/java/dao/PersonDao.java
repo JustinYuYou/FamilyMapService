@@ -29,7 +29,7 @@ public class PersonDao{
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        Person person = null;
+        Person person;
         try {
             String sql = "select personID, associatedUsername, firstName, lastName, gender, " +
                     "fatherID, motherID, spouseID from Person where personID = " + personID;
