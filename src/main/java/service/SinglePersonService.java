@@ -4,7 +4,6 @@ import dao.Database;
 import dao.PersonDao;
 import databaseAccessException.DataAccessException;
 import model.Person;
-import request.SinglePersonRequest;
 import response.SinglePersonResponse;
 
 import java.sql.SQLException;
@@ -15,26 +14,29 @@ import java.sql.SQLException;
  * Description: Returns the single Person object with the specified ID.
  */
 public class SinglePersonService {
-    public SinglePersonResponse readSinglePerson(SinglePersonRequest r) {
+    public SinglePersonResponse readSinglePerson(String personID) {
         Database db = new Database();
-        PersonDao personDao = null;
+        PersonDao personDao;
         Person person = null;
-        try {
-            db.openConnection();
-            person = personDao.findPerson(r.getPersonID());
-            db.closeConnection(true);
-        } catch (DataAccessException e) {
-            System.out.println(e);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        if(person != null){
-            return new SinglePersonResponse(person.getPersonID(), person.getAssociatedUsername(),
+        try {
+            personDao = new PersonDao(db.openConnection());
+            person = personDao.findPerson(personID);
+            db.closeConnection(true);
+        } catch (DataAccessException | SQLException e) {
+           System.out.println(e);
+            try {
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+        if (person != null) {
+            return new SinglePersonResponse(person.getAssociatedUsername(), person.getPersonID(),
                     person.getFirstName(), person.getLastName(), person.getGender(), person.getFatherID(),
                     person.getMotherID(), person.getSpouseID(), true);
         } else {
-            return new SinglePersonResponse("Unable to retrieve the person with id " + r.getPersonID(), false);
+            return new SinglePersonResponse("Invalid personID parameter", false);
         }
     }
 }

@@ -23,10 +23,9 @@ public class PersonDao{
     /**
      * Retrieve a person from the database.
      * @param personID person to be found
-     * @throws SQLException if an SQL error occurs
      * @return the person
      */
-    public Person findPerson(String personID) throws SQLException, DataAccessException {
+    public Person findPerson(String personID) throws DataAccessException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -88,7 +87,7 @@ public class PersonDao{
      * @param person person to be added
      * @throws SQLException if an SQL error occurs
      */
-    public void insertPerson(Person person) throws DataAccessException, SQLException{
+    public void insertPerson(Person person) throws DataAccessException{
         String sql = "insert into Person (personID, associatedUsername," +
                 "firstName, lastName, gender, fatherID, motherID, spouseID) " +
                 "values (?,?,?,?,?,?,?,?)";
@@ -128,7 +127,7 @@ public class PersonDao{
      * @param person the person to be deleted
      * @throws SQLException if an SQL error occurs
      */
-    public void deletePerson(Person person) throws SQLException{
+    public void deletePerson(Person person){
 
     }
 
@@ -137,7 +136,7 @@ public class PersonDao{
      * Delete all the persons from the database
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteAllPersons() throws SQLException{
+    public void deleteAllPersons() throws DataAccessException{
         PreparedStatement stmt = null;
 
         try {
@@ -147,10 +146,18 @@ public class PersonDao{
             int count = stmt.executeUpdate();
 
             System.out.printf("Deleted %d persons\n", count);
-        } finally {
+        } catch (SQLException e) {
+            System.out.println(e);
+        }finally{
             if(stmt != null){
-                stmt.close();
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
             }
+            throw new DataAccessException("Unable to delete");
         }
     }
 

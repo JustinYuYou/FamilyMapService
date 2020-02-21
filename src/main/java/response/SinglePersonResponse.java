@@ -4,8 +4,8 @@ package response;
  * A response to return a person with all of the information
  */
 public class SinglePersonResponse {
-    private String personID;
     private String associatedUsername;
+    private String personID;
     private String firstName;
     private String lastName;
     private String gender;
@@ -16,10 +16,11 @@ public class SinglePersonResponse {
     private String message;
     private boolean success;
 
-    public SinglePersonResponse(String personID, String associatedUsername, String firstName, String lastName, String gender,
-                                String fatherID, String motherID, String spouseID, boolean success) {
-        this.personID = personID;
+    public SinglePersonResponse(String associatedUsername, String personID,
+                                String firstName, String lastName, String gender, String fatherID,
+                                String motherID, String spouseID, boolean success) {
         this.associatedUsername = associatedUsername;
+        this.personID = personID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;

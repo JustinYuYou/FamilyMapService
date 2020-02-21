@@ -26,9 +26,8 @@ public class EventDao {
      *
      * @param eventID event to be found
      * @return the events
-     * @throws SQLException if an SQL error occurs
      */
-    public Event findEvent(String eventID) throws SQLException, DataAccessException {
+    public Event findEvent(String eventID) throws DataAccessException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
@@ -96,7 +95,7 @@ public class EventDao {
      * @param event event to be inserted
      * @throws SQLException if an SQL error occurs
      */
-    public void insertEvent(Event event) throws SQLException, DataAccessException {
+    public void insertEvent(Event event) throws DataAccessException {
         String sql = "insert into Event (eventID, associatedUsername, personID, " +
                 "latitude, longitude, country, city, eventType, year) " +
                 "values (?,?,?,?,?,?,?,?,?)";
@@ -106,7 +105,7 @@ public class EventDao {
             stmt.setString(3, event.getPersonID());
             stmt.setFloat(4, event.getLatitude());
             stmt.setFloat(5, event.getLongitude());
-            stmt.setString(6,event.getCountry());
+            stmt.setString(6, event.getCountry());
             stmt.setString(7, event.getCity());
             stmt.setString(8, event.getEventType());
             stmt.setInt(9, event.getYear());
@@ -132,7 +131,7 @@ public class EventDao {
      *
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteAllEvents() throws SQLException {
+    public void deleteAllEvents() throws DataAccessException {
         PreparedStatement stmt = null;
 
         try {
@@ -142,9 +141,15 @@ public class EventDao {
             int count = stmt.executeUpdate();
 
             System.out.printf("Deleted %d events\n", count);
+        } catch (SQLException e) {
+            System.out.println(e);
         } finally {
             if (stmt != null) {
-                stmt.close();
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
