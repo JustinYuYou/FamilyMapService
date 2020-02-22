@@ -4,6 +4,7 @@ import dao.Database;
 import dao.EventDao;
 import databaseAccessException.DataAccessException;
 import model.Event;
+import response.AllEventResponse;
 import response.SingleEventResponse;
 
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  * Example: /event/251837d7
  * Description: Returns the single Event object with the specified ID.
  */
-public class SingleEventService {
+public class EventService {
     public SingleEventResponse readSingleEvent(String eventID) {
         Database db = new Database();
         Event event = null;
@@ -40,5 +41,9 @@ public class SingleEventService {
         } else {
             return new SingleEventResponse("Invalid eventID parameter", false);
         }
+    }
+
+    public AllEventResponse readAllEvent () {
+        return null;
     }
 }

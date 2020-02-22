@@ -110,20 +110,12 @@ public class PersonDao {
         } catch (SQLException e) {
             throw new DataAccessException("Error encountered while inserting Person into the database");
         }
-//        try {
-//            String sql = String.format("insert into Person (personID, associatedUsername," +
-//                    "firstName, lastName, gender, fatherID, motherID, spouseID) " +
-//                    "values (%s, %s, %s, %s, %s, %s, %s, %s)", person.getPersonID(),
-//                    person.getAssociatedUsername(), person.getFirstName(), person.getLastName(),
-//                    person.getGender(), person.getFatherID(), person.getMotherID(), person.getSpouseID());
-//            stmt = connection.prepareStatement(sql);
-//
-//            stmt.executeUpdate();
-//        } finally {
-//            if(stmt != null) {
-//                stmt.close();
-//            }
-//        }
+    }
+
+    public void insertPeople(List<Person> people) throws DataAccessException {
+        for(Person person : people) {
+            insertPerson(person);
+        }
     }
 
     /**

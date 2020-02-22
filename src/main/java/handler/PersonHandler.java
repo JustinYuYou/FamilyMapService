@@ -3,14 +3,14 @@ package handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import response.AllPersonResponse;
 import response.SinglePersonResponse;
-import service.SinglePersonService;
+import service.PersonService;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 
-public class SinglePersonHandler extends ParentHandler {
+public class PersonHandler extends ParentHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -26,25 +26,29 @@ public class SinglePersonHandler extends ParentHandler {
                     // Extract the auth token from the "Authorization" header
                     String authToken = reqHeaders.getFirst("Authorization");
 
-
                     String url = exchange.getRequestURI().toString();
-                    String personID = url.split("/")[(url.split("/").length - 1)];
 
+                    String urlComponent[] = url.split("/");
+                    
+                    //If it has personID info, it will be getting one person
+                    PersonService personService = new PersonService();
+                    String respData;
+                    
+                    if (urlComponent.length == 2) {
+                        String personID = urlComponent[urlComponent.length - 1];
+                        SinglePersonResponse response = personService.readSinglePerson(personID);
 
-                    SinglePersonService singlePersonService = new SinglePersonService();
-                    SinglePersonResponse response = singlePersonService.readSinglePerson(personID);
+                        respData = new Gson().toJson(response);
+                    } else {
+                        AllPersonResponse response = personService.readAllPerson();
+                        
+                        respData = new Gson().toJson(response);
 
-
-                    // This is the JSON data we will return in the HTTP response body
-                    // A realistic example would retrieve game data from the database
-                    // and convert that to Json.
-                    String respData = new Gson().toJson(response);
-
+                    }
                     // Start sending the HTTP response to the client, starting with
                     // the status code and any defined headers.
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-
+                    
                     // Now that the status code and headers have been sent to the client,
                     // next we send the JSON data in the HTTP response body.
 
@@ -82,11 +86,6 @@ public class SinglePersonHandler extends ParentHandler {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 
 
 }

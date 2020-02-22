@@ -4,6 +4,7 @@ import dao.Database;
 import dao.PersonDao;
 import databaseAccessException.DataAccessException;
 import model.Person;
+import response.AllPersonResponse;
 import response.SinglePersonResponse;
 
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  * Example: /person/7255e93e
  * Description: Returns the single Person object with the specified ID.
  */
-public class SinglePersonService {
+public class PersonService {
     public SinglePersonResponse readSinglePerson(String personID) {
         Database db = new Database();
         PersonDao personDao;
@@ -38,5 +39,9 @@ public class SinglePersonService {
         } else {
             return new SinglePersonResponse("Invalid personID parameter", false);
         }
+    }
+
+    public AllPersonResponse readAllPerson() {
+        return null;
     }
 }

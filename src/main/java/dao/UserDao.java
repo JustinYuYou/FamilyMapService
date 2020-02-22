@@ -69,33 +69,6 @@ public class UserDao {
         }
 
         return null;
-
-        //        User user;
-//        ResultSet rs = null;
-//        String sql = "SELECT * FROM User WHERE userName = ?;";
-//        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-//            stmt.setString(1, username);
-//            rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                user = new User(rs.getString("userName"), rs.getString("personID"),
-//                        rs.getString("password"), rs.getString("email"),
-//                        rs.getString("firstName"), rs.getString("lastName"),
-//                        rs.getString("gender"));
-//                return user;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw new DataAccessException("Error encountered while finding event");
-//        } finally {
-//            if(rs != null) {
-//                try {
-//                    rs.close();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        }
     }
 
     /**
