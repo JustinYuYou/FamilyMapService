@@ -104,7 +104,7 @@ public class UserDao {
      * @param user the user to be inserted
      * @throws SQLException if an SQL error occurs
      */
-    public void insertUser(User user) throws DataAccessException, SQLException {
+    public void insertUser(User user) throws DataAccessException {
         String sql = "insert into User (userName, personID," +
                 "password, email, firstName, lastName, gender) " +
                 "values (?,?,?,?,?,?,?)";
@@ -142,7 +142,7 @@ public class UserDao {
      *
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteAllUsers() throws SQLException {
+    public void deleteAllUsers() {
         PreparedStatement stmt = null;
 
         try {
@@ -152,9 +152,15 @@ public class UserDao {
             int count = stmt.executeUpdate();
 
             System.out.printf("Deleted %d users\n", count);
+        } catch (SQLException e) {
+            System.out.println(e);
         } finally {
             if (stmt != null) {
-                stmt.close();
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

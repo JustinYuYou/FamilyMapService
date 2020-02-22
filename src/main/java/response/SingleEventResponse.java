@@ -5,11 +5,10 @@ package response;
  */
 public class SingleEventResponse {
     private String associatedUsername;
-
     private String eventID;
     private String personID;
-    private double latitude;
-    private double longitude;
+    private float latitude;
+    private float longitude;
     private String country;
     private String city;
     private String eventType;
@@ -18,7 +17,7 @@ public class SingleEventResponse {
     private String message;
     private boolean success;
 
-    public SingleEventResponse(String associatedUsername, String eventID, String personID, double latitude, double longitude,
+    public SingleEventResponse(String associatedUsername, String eventID, String personID, float latitude, float longitude,
                                String country, String city, String eventType, int year, boolean success) {
         this.associatedUsername = associatedUsername;
         this.eventID = eventID;
@@ -49,11 +48,11 @@ public class SingleEventResponse {
         return personID;
     }
 
-    public double getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
 
-    public double getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
 

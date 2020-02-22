@@ -13,15 +13,17 @@ import java.util.List;
 /**
  * Database access object for Person object. It allows to retrive, insert, update, and delete person
  */
-public class PersonDao{
+public class PersonDao {
 
     private Connection connection;
 
     public PersonDao(Connection connection) {
         this.connection = connection;
     }
+
     /**
      * Retrieve a person from the database.
+     *
      * @param personID person to be found
      * @return the person
      */
@@ -37,7 +39,7 @@ public class PersonDao{
 
             rs = stmt.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 String retrievedPersonID = rs.getString(1);
                 String retrievedAssociatedUsername = rs.getString(2);
                 String retrievedFirstName = rs.getString(3);
@@ -51,17 +53,17 @@ public class PersonDao{
                         retrievedGender, retrievedFatherID, retrievedMotherID, retrievedSpouseID);
                 return person;
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DataAccessException("Error encountered while finding a person on the database");
         } finally {
-            if(rs != null){
+            if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if(stmt != null){
+            if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
@@ -75,19 +77,22 @@ public class PersonDao{
 
     /**
      * Retrieve all of the person's for the current user
+     *
      * @return persons persons to be retrieved
      * @throws SQLException if an SQL error occurs
      */
-    public List<Person> getPersons() throws SQLException {
+    public List<Person> findPersons() throws SQLException {
 
         return null;
     }
+
     /**
      * Add a person on the database
+     *
      * @param person person to be added
      * @throws SQLException if an SQL error occurs
      */
-    public void insertPerson(Person person) throws DataAccessException{
+    public void insertPerson(Person person) throws DataAccessException {
         String sql = "insert into Person (personID, associatedUsername," +
                 "firstName, lastName, gender, fatherID, motherID, spouseID) " +
                 "values (?,?,?,?,?,?,?,?)";
@@ -121,22 +126,12 @@ public class PersonDao{
 //        }
     }
 
-
-    /**
-     * Delete one of the person from the database
-     * @param person the person to be deleted
-     * @throws SQLException if an SQL error occurs
-     */
-    public void deletePerson(Person person){
-
-    }
-
-
     /**
      * Delete all the persons from the database
+     *
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteAllPersons() throws DataAccessException{
+    public void deleteAllPersons() throws DataAccessException {
         PreparedStatement stmt = null;
 
         try {
@@ -148,8 +143,9 @@ public class PersonDao{
             System.out.printf("Deleted %d persons\n", count);
         } catch (SQLException e) {
             System.out.println(e);
-        }finally{
-            if(stmt != null){
+            throw new DataAccessException("Unable to delete");
+        } finally {
+            if (stmt != null) {
                 try {
                     stmt.close();
                 } catch (SQLException e) {
@@ -157,7 +153,6 @@ public class PersonDao{
                 }
 
             }
-            throw new DataAccessException("Unable to delete");
         }
     }
 

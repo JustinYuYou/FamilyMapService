@@ -23,7 +23,7 @@ public class AuthTokenDao {
      * @return the authToken
      * @throws SQLException if an SQL error occurs
      */
-    public AuthToken findAuthToken(String authTokenToBeGet) throws SQLException, DataAccessException {
+    public AuthToken findAuthToken(String authTokenToBeGet) throws DataAccessException {
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -109,7 +109,7 @@ public class AuthTokenDao {
      *
      * @throws SQLException if an SQL error occurs
      */
-    public void deleteAllAuthTokens() throws SQLException {
+    public void deleteAllAuthTokens() {
         PreparedStatement stmt = null;
 
         try {
@@ -119,9 +119,15 @@ public class AuthTokenDao {
             int count = stmt.executeUpdate();
 
             System.out.printf("Deleted %d authTokens\n", count);
+        } catch (SQLException e) {
+            System.out.println(e);
         } finally {
             if (stmt != null) {
-                stmt.close();
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
