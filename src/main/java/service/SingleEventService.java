@@ -23,7 +23,7 @@ public class SingleEventService {
             eventDao = new EventDao(db.openConnection());
             event = eventDao.findEvent(eventID);
             db.closeConnection(true);
-        } catch (DataAccessException | SQLException e) {
+        } catch (DataAccessException e) {
 
             System.out.println(e);
             try {

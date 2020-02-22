@@ -3,7 +3,10 @@ import handler.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.URL;
 
 /**
  * The server for the FMS.
@@ -18,8 +21,6 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     //HttpServer Creation and Startup
@@ -36,7 +37,7 @@ public class Server {
         httpServer.createContext("/user/register", new RegisterHandler());
         httpServer.createContext("/user/login", new LoginHandler());
         httpServer.createContext("/clear", new ClearHandler());
-        httpServer.createContext(": /fill/%s/%d", new FillHandler());
+        httpServer.createContext(": /fill", new FillHandler());
         httpServer.createContext("/load", new LoginHandler());
         //httpServer.createContext("/person/"+personID, new SinglePersonHandler());
         httpServer.createContext("/person", new AllMemberHandler());
