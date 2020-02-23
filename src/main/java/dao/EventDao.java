@@ -117,14 +117,6 @@ public class EventDao {
     }
 
 
-    /**
-     * Delete one of the events from the database
-     *
-     * @throws SQLException if an SQL error occurs
-     */
-    public void deleteEvent() throws SQLException {
-
-    }
 
     /**
      * Delete all the events from the database

@@ -95,16 +95,6 @@ public class AuthTokenDao {
 
 
     /**
-     * delete the specified token on the database
-     *
-     * @param authToken the token to be deleted
-     * @throws SQLException if an SQL error occurs
-     */
-    public void deleteToken(String authToken) throws SQLException {
-
-    }
-
-    /**
      * delete all the tokens on the database
      *
      * @throws SQLException if an SQL error occurs
