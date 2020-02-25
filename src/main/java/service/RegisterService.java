@@ -7,7 +7,7 @@ import model.Person;
 import model.User;
 import request.RegisterRequest;
 import response.RegisterResponse;
-import util.GeneratePersonID;
+import util.GenerateRandom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class RegisterService {
 
         try {
             userDao = new UserDao(db.openConnection());
-            String personID = GeneratePersonID.generatePersonID();
+            String personID = GenerateRandom.generateRandomString();
             user = new User(r.getUserName(), personID, r.getPassword(), r.getEmail(),
                     r.getFirstName(), r.getLastName(), r.getGender());
 

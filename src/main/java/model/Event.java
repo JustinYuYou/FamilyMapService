@@ -16,6 +16,9 @@ public class Event {
     private String eventType = null; //Type of event (birth, baptism, christening, marriage, death, etc.)
     private int year = 0;
 
+    public Event() {
+    }
+
     public Event(String eventID, String associatedUsername, String personID, float latitude,
                  float longitude, String country, String city, String eventType, int year) {
         this.eventID = eventID;

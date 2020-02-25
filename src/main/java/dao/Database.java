@@ -63,7 +63,6 @@ public class Database {
                 //will rollback any changes we made during this connection
                 connection.rollback();
             }
-
             connection.close();
             connection = null;
         } catch (SQLException e) {

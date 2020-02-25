@@ -33,8 +33,9 @@ public class UserDao {
         User user = null;
         try {
             String sql = "select userName, personID, password, email, " +
-                    "firstName, lastName, gender from User where userName = " + username;
+                    "firstName, lastName, gender from User where userName = ?";
             stmt = connection.prepareStatement(sql);
+            stmt.setString(1, username);
 
             rs = stmt.executeQuery();
 
@@ -51,6 +52,9 @@ public class UserDao {
                 return user;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e);
+
             throw new DataAccessException("Error encountered while finding a user on the database");
         } finally {
             if (rs != null) {

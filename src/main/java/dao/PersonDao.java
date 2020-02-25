@@ -34,8 +34,9 @@ public class PersonDao {
         Person person;
         try {
             String sql = "select personID, associatedUsername, firstName, lastName, gender, " +
-                    "fatherID, motherID, spouseID from Person where personID = " + personID;
+                    "fatherID, motherID, spouseID from Person where personID = ?";
             stmt = connection.prepareStatement(sql);
+            stmt.setString(1, personID);
 
             rs = stmt.executeQuery();
 

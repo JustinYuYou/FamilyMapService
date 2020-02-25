@@ -14,6 +14,9 @@ public class User {
     private String lastName = null;
     private String gender = null;
 
+    public User() {
+    }
+
     public User(String userName, String personID, String password, String email, String firstName, String lastName, String gender) {
         this.userName = userName;
         this.personID = personID;

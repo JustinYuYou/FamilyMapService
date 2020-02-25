@@ -17,6 +17,9 @@ public class Person {
     private String motherID = null;
     private String spouseID = null;
 
+    public Person() {
+    }
+
     public Person(String personID, String associatedUsername, String firstName, String lastName,
                   String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;

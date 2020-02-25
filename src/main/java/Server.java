@@ -11,7 +11,6 @@ public class Server {
     public static void main(String[] args){
         Server server = new Server();
         int port = 8080;
-
         try {
             server.startServer(port);
         } catch (IOException e) {

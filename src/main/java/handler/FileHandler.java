@@ -21,6 +21,7 @@ public class FileHandler implements HttpHandler {
         if(exchange.getRequestMethod().toUpperCase().equals("GET")) {
             String urlPath = exchange.getRequestURI().toString();
 
+            System.out.println(urlPath);
             if(urlPath == null || urlPath.equals("/") || urlPath.equals("")) {
                 urlPath = "/index.html";
             }

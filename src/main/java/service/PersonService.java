@@ -10,6 +10,7 @@ import model.Person;
 import model.User;
 import response.AllPersonResponse;
 import response.SinglePersonResponse;
+import util.GeneratePerson;
 
 import java.sql.Connection;
 import java.sql.SQLException;

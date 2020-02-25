@@ -42,9 +42,6 @@ public class LoadHandler extends ParentHandler{
 
         } catch (IOException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
-
-            exchange.getResponseBody().close();
-
             e.printStackTrace();
         } finally {
             String respData = new Gson().toJson(loadResponse);

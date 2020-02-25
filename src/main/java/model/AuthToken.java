@@ -9,6 +9,9 @@ public class AuthToken {
     private String authToken = null;
     private String associatedUsername = null;
 
+    public AuthToken() {
+    }
+
     public AuthToken(String authToken, String associatedUsername) {
         this.authToken = authToken;
         this.associatedUsername = associatedUsername;

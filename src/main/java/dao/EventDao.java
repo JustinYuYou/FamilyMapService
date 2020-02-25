@@ -34,8 +34,9 @@ public class EventDao {
         Event event;
         try {
             String sql = "select eventID, associatedUsername, personID, latitude, " +
-                    "longitude, country, city, eventType, year from Event where eventID = " + eventID;
+                    "longitude, country, city, eventType, year from Event where eventID = ?";
             stmt = connection.prepareStatement(sql);
+            stmt.setString(1,  eventID);
 
             rs = stmt.executeQuery();
 

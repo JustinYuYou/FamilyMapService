@@ -9,6 +9,7 @@ import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import response.ClearResponse;
 
 import java.sql.Connection;
 
@@ -97,7 +98,7 @@ class ClearServiceTest {
             db.closeConnection(false);
         }
 
-        clearService.clear();
+        ClearResponse clearResponse = clearService.clear();
 
         conn = db.openConnection();
 
@@ -120,6 +121,8 @@ class ClearServiceTest {
         assertEquals(p , null);
         assertEquals(e , null);
 
-
+        assertTrue(clearResponse.isSuccess());
+        assertNotNull(clearResponse.getMessage());
     }
+
 }

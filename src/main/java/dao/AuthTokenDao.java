@@ -32,8 +32,9 @@ public class AuthTokenDao {
 
         try {
             String sql = "select authToken, associatedUsername from AuthToken " +
-                    "where authToken = " + authTokenToBeGet;
+                    "where authToken = ?";
             stmt = connection.prepareStatement(sql);
+            stmt.setString(1, authTokenToBeGet);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
