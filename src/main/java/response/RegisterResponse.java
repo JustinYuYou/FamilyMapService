@@ -9,7 +9,7 @@ public class RegisterResponse {
     private String personID;
 
     private String message;
-    private boolean success = false;
+    private boolean success;
 
     public RegisterResponse(String authToken, String userName, String personID, boolean success) {
         this.authToken = authToken;

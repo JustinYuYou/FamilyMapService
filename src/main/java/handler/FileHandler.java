@@ -42,8 +42,6 @@ public class FileHandler implements HttpHandler {
             Files.copy(filePath, respBody);
             respBody.close();
 
-
-
         } else {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
         }

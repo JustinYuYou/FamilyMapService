@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +16,7 @@ class UserDaoTest {
     private Database db;
     private User compareUser;
     private User compareUser2;
+    private User user;
 
     @BeforeEach
     void setUp() throws Exception{
@@ -26,6 +29,8 @@ class UserDaoTest {
         compareUser2 = new User("12334", "jj",
                 "345345", "sdfdsf@sdfuo", "sdf",
                 "sdfsdf", "Female");
+        user = new User("sheila", "235we",
+                "ewof4wef", "Parker", "Patrick", "james", "f");
     }
 
     @AfterEach
@@ -168,6 +173,41 @@ class UserDaoTest {
         }
 
         assertFalse(work);
+    }
+
+    @Test
+    public void insertAllPass() {
+        User compareTest = null;
+
+        try {
+            Connection conn = db.openConnection();
+            UserDao userDao = new UserDao(conn);
+
+            //While insert returns a bool we can't use that to verify that our function actually worked
+            //only that it ran without causing an error
+            List<User> users = new ArrayList<>();
+            users.add(compareUser);
+            users.add(compareUser2);
+            users.add(user);
+            userDao.insertUsers(users);
+            //So lets use a find method to get the event that we just put in back out
+            compareTest = userDao.findUser(compareUser.getUserName());
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            try {
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        //First lets see if our find found anything at all. If it did then we know that if nothing
+        //else something was put into our database, since we cleared it in the beginning
+        assertNotNull(compareTest);
+        //Now lets make sure that what we put in is exactly the same as what we got out. If this
+        //passes then we know that our insert did put something in, and that it didn't change the
+        //data in any way
+        assertEquals(compareUser, compareTest);
     }
 
     @Test

@@ -1,13 +1,20 @@
 package service;
 
+import dao.AuthTokenDao;
 import dao.Database;
 import dao.PersonDao;
+import dao.UserDao;
 import databaseAccessException.DataAccessException;
+import model.AuthToken;
 import model.Person;
+import model.User;
 import response.AllPersonResponse;
 import response.SinglePersonResponse;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * URL Path: /person/[personID]
@@ -41,7 +48,26 @@ public class PersonService {
         }
     }
 
-    public AllPersonResponse readAllPerson() {
+    public AllPersonResponse readAllPerson(String authTokenString) {
+        List<Person> allFamilyMembers = new ArrayList<>();
+        Database db = new Database();
+        AuthTokenDao authTokenDao;
+        AuthToken authToken = null;
+        UserDao userDao;
+        User user = null;
+        Connection connection;
+        try {
+            connection = db.openConnection();
+            authTokenDao = new AuthTokenDao(connection);
+            authToken = authTokenDao.findAuthToken(authTokenString);
+            String username = authToken.getAssociatedUsername();
+
+            userDao = new UserDao(connection);
+            user = userDao.findUser(username);
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

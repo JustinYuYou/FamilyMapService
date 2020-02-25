@@ -116,7 +116,11 @@ public class EventDao {
         }
     }
 
-
+    public void insertEvents(List<Event> events) throws DataAccessException {
+        for(Event event : events) {
+            insertEvent(event);
+        }
+    }
 
     /**
      * Delete all the events from the database

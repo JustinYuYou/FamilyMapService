@@ -17,20 +17,17 @@ public class PersonHandler extends ParentHandler {
 
         try {
             if (exchange.getRequestMethod().toUpperCase().equals("GET")) {
-
                 // Get the HTTP request headers
                 Headers reqHeaders = exchange.getRequestHeaders();
-
-                // Check to see if an "Authorization" header is present
                 if (reqHeaders.containsKey("Authorization")) {
                     // Extract the auth token from the "Authorization" header
-                    String authToken = reqHeaders.getFirst("Authorization");
+                    String authTokenString = reqHeaders.getFirst("Authorization");
 
                     String url = exchange.getRequestURI().toString();
-
                     String urlComponent[] = url.split("/");
                     
                     //If it has personID info, it will be getting one person
+                    //else if will be all people
                     PersonService personService = new PersonService();
                     String respData;
                     
@@ -40,8 +37,7 @@ public class PersonHandler extends ParentHandler {
 
                         respData = new Gson().toJson(response);
                     } else {
-                        AllPersonResponse response = personService.readAllPerson();
-                        
+                        AllPersonResponse response = personService.readAllPerson(authTokenString);
                         respData = new Gson().toJson(response);
 
                     }

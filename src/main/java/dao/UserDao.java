@@ -6,6 +6,7 @@ import model.User;
 
 import java.io.File;
 import java.sql.*;
+import java.util.List;
 
 /**
  * Database access object for User object. It allows to retrieve, insert, update, and delete user
@@ -98,16 +99,10 @@ public class UserDao {
             throw new DataAccessException("Error encountered while inserting into the database");
         }
     }
-
-
-    /**
-     * Delete one of the users from the database
-     *
-     * @param username the user to be delted
-     * @throws SQLException if an SQL error occurs
-     */
-    public void deleteUser(String username) throws SQLException {
-
+    public void insertUsers(List<User> users) throws DataAccessException {
+        for(User user : users) {
+            insertUser(user);
+        }
     }
 
     /**

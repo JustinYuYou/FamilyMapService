@@ -34,7 +34,7 @@ public class Server {
         httpServer.createContext("/user/login", new LoginHandler());
         httpServer.createContext("/clear", new ClearHandler());
         httpServer.createContext("/fill", new FillHandler());
-        httpServer.createContext("/load", new LoginHandler());
+        httpServer.createContext("/load", new LoadHandler());
         httpServer.createContext("/person", new PersonHandler());
         httpServer.createContext("/event", new EventHandler());
     }

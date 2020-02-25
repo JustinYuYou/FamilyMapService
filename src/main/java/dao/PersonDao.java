@@ -81,8 +81,11 @@ public class PersonDao {
      * @return persons persons to be retrieved
      * @throws SQLException if an SQL error occurs
      */
-    public List<Person> findPersons() throws SQLException {
+    public List<Person> findPersons(User user) throws SQLException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
+        Person person;
         return null;
     }
 
@@ -114,6 +117,12 @@ public class PersonDao {
 
     public void insertPeople(List<Person> people) throws DataAccessException {
         for(Person person : people) {
+            insertPerson(person);
+        }
+    }
+
+    public void insertPersons(List<Person> persons) throws DataAccessException {
+        for(Person person : persons) {
             insertPerson(person);
         }
     }

@@ -4,8 +4,6 @@ import dao.Database;
 import databaseAccessException.DataAccessException;
 import response.ClearResponse;
 
-import java.sql.SQLException;
-
 /**
  * URL Path: /clear
  * Description: Deletes ALL data from the database, including user accounts, auth tokens, and
@@ -33,7 +31,7 @@ public class ClearService {
         if (success) {
             return new ClearResponse("Clear succeeded.", true);
         } else {
-            return new ClearResponse("Internal server error", false);
+            return new ClearResponse("Error while clearing the data", false);
         }
     }
 }

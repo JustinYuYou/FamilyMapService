@@ -37,13 +37,9 @@ public class EventHandler extends ParentHandler {
                             SingleEventResponse response = eventService.readSingleEvent(eventID);
                             respData = new Gson().toJson(response);
                         } else {
-                            AllEventResponse response = eventService.readAllEvent();
-
+                            AllEventResponse response = eventService.readAllEvent(authToken);
                             respData = new Gson().toJson(response);
                         }
-
-
-
                         // Start sending the HTTP response to the client, starting with
                         // the status code and any defined headers.
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

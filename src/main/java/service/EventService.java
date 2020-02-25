@@ -1,13 +1,21 @@
 package service;
 
+import dao.AuthTokenDao;
 import dao.Database;
 import dao.EventDao;
+import dao.UserDao;
 import databaseAccessException.DataAccessException;
+import model.AuthToken;
 import model.Event;
+import model.Event;
+import model.User;
 import response.AllEventResponse;
 import response.SingleEventResponse;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * URL Path: /event/[eventID]
@@ -43,7 +51,26 @@ public class EventService {
         }
     }
 
-    public AllEventResponse readAllEvent () {
+    public AllEventResponse readAllEvent (String authTokenString) {
+        List<Event> allEvents = new ArrayList<>();
+        Database db = new Database();
+        AuthTokenDao authTokenDao;
+        AuthToken authToken = null;
+        UserDao userDao;
+        User user = null;
+        Connection connection;
+        try {
+            connection = db.openConnection();
+            authTokenDao = new AuthTokenDao(connection);
+            authToken = authTokenDao.findAuthToken(authTokenString);
+            String username = authToken.getAssociatedUsername();
+
+            userDao = new UserDao(connection);
+            user = userDao.findUser(username);
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
