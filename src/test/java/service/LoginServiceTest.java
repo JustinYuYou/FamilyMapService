@@ -66,7 +66,7 @@ class LoginServiceTest {
         LoginResponse loginResponse = loginTest.login(r);
 
         assertFalse(loginResponse.isSuccess());
-        assertEquals(loginResponse.getMessage(), "User doesn't exist");
+        assertEquals(loginResponse.getMessage(), "User does not exist");
 
     }
 

@@ -31,7 +31,7 @@ public class PersonHandler extends ParentHandler {
                     PersonService personService = new PersonService();
                     String respData;
                     
-                    if (urlComponent.length == 2) {
+                    if (urlComponent.length == 3) {
                         String personID = urlComponent[urlComponent.length - 1];
                         SinglePersonResponse response = personService.readSinglePerson(personID);
 

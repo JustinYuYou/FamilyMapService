@@ -1,14 +1,9 @@
 package service;
 
-import dao.AuthTokenDao;
-import dao.Database;
-import dao.EventDao;
-import dao.UserDao;
+import dao.*;
 import databaseAccessException.DataAccessException;
-import model.AuthToken;
+import model.*;
 import model.Event;
-import model.Event;
-import model.User;
 import response.AllEventResponse;
 import response.SingleEventResponse;
 
@@ -58,19 +53,55 @@ public class EventService {
         AuthToken authToken = null;
         UserDao userDao;
         User user = null;
-        Connection connection;
+        PersonDao personDao;
+        List<Person> allFamilyMembers = new ArrayList<>();
+
+        EventDao eventDao;
+
+        AllEventResponse allEventResponse = null;
+
         try {
-            connection = db.openConnection();
+            Connection connection = db.openConnection();
+
             authTokenDao = new AuthTokenDao(connection);
             authToken = authTokenDao.findAuthToken(authTokenString);
-            String username = authToken.getAssociatedUsername();
+            boolean isCommit = true;
+            if(authToken == null) {
+                allEventResponse = new AllEventResponse("Invalid auth token", false);
+                isCommit = false;
+            } else {
+                String username = authToken.getAssociatedUsername();
+                userDao = new UserDao(connection);
+                user = userDao.findUser(username);
 
-            userDao = new UserDao(connection);
-            user = userDao.findUser(username);
+                if(user == null) {
+                    allEventResponse = new AllEventResponse("There is no user for this authToken", false);
+                    isCommit = false;
+                } else {
+
+                    personDao = new PersonDao(connection);
+                    allFamilyMembers = personDao.findFamilyMembers(username);
+
+                    eventDao = new EventDao(connection);
+                    for (Person member : allFamilyMembers) {
+                        List<Event> eachMemberEvent = eventDao.findEvents(member.getPersonID());
+                        allEvents.addAll(eachMemberEvent);
+                    }
+
+                    allEventResponse = new AllEventResponse(allEvents, true);
+                }
+            }
+
+            db.closeConnection(isCommit);
 
         } catch (DataAccessException e) {
+           try {
+               db.closeConnection(false);
+           } catch (DataAccessException ex) {
+               ex.printStackTrace();
+           }
             e.printStackTrace();
         }
-        return null;
+        return allEventResponse;
     }
 }

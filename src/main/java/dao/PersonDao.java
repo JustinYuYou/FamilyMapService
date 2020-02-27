@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,12 +83,56 @@ public class PersonDao {
      * @return persons persons to be retrieved
      * @throws SQLException if an SQL error occurs
      */
-    public List<Person> findPersons(User user) throws SQLException {
+    public List<Person> findFamilyMembers(String username) throws DataAccessException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        Person person;
-        return null;
+        List<Person> familyMembers = new ArrayList<>();
+
+        try {
+            String sql = "select personID, associatedUsername, firstName, lastName, " +
+                    "gender, fatherID, motherID, spouseID from Person where associatedUsername = ? ";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, username);
+
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                String personID = rs.getString(1);
+                String associatedUsername = rs.getString(2);
+                String firstName = rs.getString(3);
+                String lastName = rs.getString(4);
+                String gender = rs.getString(5);
+                String fatherID = rs.getString(6);
+                String motherID = rs.getString(7);
+                String spouseID = rs.getString(8);
+
+                familyMembers.add(new Person(personID, associatedUsername, firstName,
+                        lastName, gender, fatherID, motherID, spouseID));
+            }
+
+        }  catch (SQLException e) {
+            throw new DataAccessException("Error encountered while finding family members on the database");
+        }  finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(familyMembers.isEmpty()) {
+            return null;
+        } else {
+            return familyMembers;
+        }
     }
 
     /**

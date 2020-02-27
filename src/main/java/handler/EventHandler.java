@@ -32,7 +32,7 @@ public class EventHandler extends ParentHandler {
                         EventService eventService = new EventService();
                         String respData;
 
-                        if(urlComponent.length == 2) {
+                        if(urlComponent.length == 3) {
                             String eventID = urlComponent[(url.split("/").length - 1)];
                             SingleEventResponse response = eventService.readSingleEvent(eventID);
                             respData = new Gson().toJson(response);

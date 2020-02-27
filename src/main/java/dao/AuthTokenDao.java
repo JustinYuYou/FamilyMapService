@@ -84,15 +84,38 @@ public class AuthTokenDao {
         }
     }
 
-    /**
-     * Update an authentication token for a user on the database
-     *
-     * @param username the user
-     * @throws SQLException if an SQL error occurs
-     */
-    public void updateToken(String username) throws SQLException {
-
-    }
+//    /**
+//     * Update an authentication token for a user on the database
+//     *
+//     * @param username the user
+//     * @throws SQLException if an SQL error occurs
+//     */
+//    public void updateToken(String newAuthTokenString, String username) throws DataAccessException {
+//        String sql = "update AuthToken set authToken = ? where associatedUsername = ?";
+//        PreparedStatement stmt = null;
+//
+//        try {
+//            stmt = connection.prepareStatement(sql);
+//            stmt.setString(1, newAuthTokenString);
+//            stmt.setString(2, username);
+//
+//            if(stmt.executeUpdate() == 1) {
+//                System.out.println("Successfully update the token");
+//            } else {
+//                System.out.println("Failed to update the token");
+//            }
+//        } catch (SQLException e) {
+//            throw new DataAccessException("Error encountered while updating an authToken into the database");
+//        } finally {
+//            if (stmt != null) {
+//                try {
+//                    stmt.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
 
     /**

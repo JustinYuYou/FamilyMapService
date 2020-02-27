@@ -5,10 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import databaseAccessException.DataAccessException;
 import model.Event;
+import model.Person;
 import model.User;
 
 /**
@@ -85,9 +87,59 @@ public class EventDao {
      * @return the events
      * @throws SQLException if an SQL error occurs
      */
-    public List<Event> getEvents(String personID) throws SQLException {
+    public List<Event> findEvents(String personID) throws DataAccessException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
-        return null;
+        List<Event> events = new ArrayList<>();
+
+        try {
+            String sql = "select eventID, associatedUsername, personID, " +
+                    "latitude, longitude, country, city, eventType, year " +
+                    "from Event where personID = ? ";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, personID);
+
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                String eventID = rs.getString(1);
+                String associatedUsername = rs.getString(2);
+                String retrievedPersonID = rs.getString(3);
+                float latitude = rs.getFloat(4);
+                float longitude = rs.getFloat(5);
+                String country = rs.getString(6);
+                String city = rs.getString(7);
+                String eventType = rs.getString(8);
+                int year = rs.getInt(9);
+
+                events.add(new Event(eventID, associatedUsername, retrievedPersonID,
+                        latitude, longitude, country, city, eventType, year));
+            }
+
+        }  catch (SQLException e) {
+            throw new DataAccessException("Error encountered while finding events on the database");
+        }  finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if(events.isEmpty()) {
+            return null;
+        } else {
+            return events;
+        }
     }
 
     /**

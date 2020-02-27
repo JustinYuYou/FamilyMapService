@@ -15,6 +15,9 @@ public class AllPersonResponse {
     private String message;
     private boolean success;
 
+    public AllPersonResponse() {
+    }
+
     public AllPersonResponse(List<Person> data, boolean success) {
         this.data = data;
         this.success = success;

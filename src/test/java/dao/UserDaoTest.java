@@ -31,6 +31,9 @@ class UserDaoTest {
                 "sdfsdf", "Female");
         user = new User("sheila", "235we",
                 "ewof4wef", "Parker", "Patrick", "james", "f");
+        db.openConnection();
+        db.clearTables();
+        db.closeConnection(true);
     }
 
     @AfterEach

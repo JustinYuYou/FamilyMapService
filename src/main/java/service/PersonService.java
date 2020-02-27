@@ -10,7 +10,6 @@ import model.Person;
 import model.User;
 import response.AllPersonResponse;
 import response.SinglePersonResponse;
-import util.GeneratePerson;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -56,19 +55,40 @@ public class PersonService {
         AuthToken authToken = null;
         UserDao userDao;
         User user = null;
-        Connection connection;
+
+        PersonDao personDao;
+
+        AllPersonResponse allPersonResponse = null;
+
         try {
-            connection = db.openConnection();
+            Connection connection = db.openConnection();
             authTokenDao = new AuthTokenDao(connection);
             authToken = authTokenDao.findAuthToken(authTokenString);
-            String username = authToken.getAssociatedUsername();
 
-            userDao = new UserDao(connection);
-            user = userDao.findUser(username);
+            boolean isCommit = true;
+            if(authToken == null) {
+                allPersonResponse = new AllPersonResponse("Invalid auth token", false);
+                isCommit = false;
+            } else {
+                String username = authToken.getAssociatedUsername();
+                userDao = new UserDao(connection);
+                user = userDao.findUser(username);
+
+                personDao = new PersonDao(connection);
+                allFamilyMembers =personDao.findFamilyMembers(user.getUserName());
+                allPersonResponse = new AllPersonResponse(allFamilyMembers, true);
+            }
+
+            db.closeConnection(isCommit);
 
         } catch (DataAccessException e) {
+            try {
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
-        return null;
+        return allPersonResponse;
     }
 }
