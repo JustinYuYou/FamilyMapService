@@ -8,6 +8,7 @@ import databaseAccessException.DataAccessException;
 import model.Event;
 import model.Person;
 import org.graalvm.compiler.replacements.Log;
+import org.w3c.dom.NameList;
 
 
 import java.io.*;
@@ -24,13 +25,22 @@ public class GenerateFamily {
 
     private int personBirthYear;
 
+    //Store it so we can pass it to mother to have the same marriage event as the father
+    private Event marriage = new Event();
+
     private List<Person> familyMembers = new ArrayList<>();
     private List<Event> familyMembersEvents = new ArrayList<>();
+
+    public GenerateFamily() {
+    }
 
     public GenerateFamily(String username) {
         this.username = username;
     }
 
+    public void startGenerating() {
+
+    }
     public void generateFamily(Person root, int generations) {
 
     }
@@ -53,31 +63,48 @@ public class GenerateFamily {
 
         //Create birth event
         int birthYear = personBirthYear - 13 - random.nextInt(27);
-        Event birth = createEvent(fatherID, this.username, birthYear);
+        Event birth = createEvent(fatherID, "Birth", birthYear);
 
         //Create marriage event
         int marriageYear = birthYear + 20 + random.nextInt(10);
-        Event marriage = createEvent(fatherID, "Marriage", marriageYear);
+        marriage = createEvent(fatherID, "Marriage", marriageYear);
 
         //Create death event
         int deathYear = personBirthYear + random.nextInt(50);
         Event death = createEvent(fatherID, "Death", deathYear);
 
 
+
+
         return father;
     }
 
 
-    private Person createMother(Person child) {
+    private Person createMother(Person father) {
 
         Person mother = new Person();
         String motherID = GenerateRandom.generateRandomString();
-        String lastName;
+        String lastName = father.getLastName();
 
-        mother.setAssociatedUsername(child.getAssociatedUsername());
+        mother.setAssociatedUsername(this.username);
         mother.setPersonID(motherID);
         mother.setFirstName(generateFemaleName());
+        mother.setLastName(lastName);
         mother.setGender("f");
+
+        //Create birth event
+        int birthYear = personBirthYear - 13 - random.nextInt(27);
+        Event birth = createEvent(motherID, "Birth", birthYear);
+
+        //Create marriage event
+        String eventID = GenerateRandom.generateRandomString();
+        Event marriageOfMother = new Event(eventID, this.username, motherID, marriage.getLatitude(),
+                            marriage.getLongitude(), marriage.getCountry(), marriage.getCity(),
+                            marriage.getEventType(), marriage.getYear());
+
+        //Create death event
+        int deathYear = personBirthYear + random.nextInt(50);
+        Event death = createEvent(motherID, "Death", deathYear);
 
 
         return mother;
@@ -86,34 +113,67 @@ public class GenerateFamily {
 
     private String generateMaleName () {
         File file = new File("C:\\Users\\ChenTing Yu\\IdeaProjects\\FamilyMapService\\json\\mnames.json");
-//        try(FileReader fileReader = new FileReader(file);
-//             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-//
-//            JsonToken tokener = new JsonToken(bufferedReader);
-//            JsonObject rootObj = new JsonObject();
-//
-//            JsonArray cdArr = (JsonArray) rootObj.get("data");
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        String maleName = "";
+        try(FileReader fileReader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
-        return null;
+           ListOfNames listOfNames = gson.fromJson(bufferedReader, ListOfNames.class);
+           int length = listOfNames.getData().size();
+            maleName = listOfNames.getData().get(random.nextInt(length));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return maleName;
     }
     private String generateFemaleName () {
-        return null;
+        File file = new File("C:\\Users\\ChenTing Yu\\IdeaProjects\\FamilyMapService\\json\\fnames.json");
+        String femaleName = "";
+
+        try(FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            ListOfNames listOfNames = gson.fromJson(bufferedReader, ListOfNames.class);
+            int length = listOfNames.getData().size();
+            femaleName = listOfNames.getData().get(random.nextInt(length));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return femaleName;
     }
 
     private String generateLastName() {
-        return null;
+        File file = new File("C:\\Users\\ChenTing Yu\\IdeaProjects\\FamilyMapService\\json\\snames.json");
+        String lastName = "";
+
+        try(FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            ListOfNames listOfNames = gson.fromJson(bufferedReader, ListOfNames.class);
+            int length = listOfNames.getData().size();
+            lastName = listOfNames.getData().get(random.nextInt(length));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lastName;
     }
 
     private Event createEvent(String personID, String eventType, int year) {
 
         String eventID = GenerateRandom.generateRandomString();
-        String locationJson = generateLocation();
 
-        Event event = gson.fromJson(locationJson, Event.class);
+        Event event = generateLocation();
         event.setAssociatedUsername(this.username);
         event.setEventID(eventID);
         event.setPersonID(personID);
@@ -123,8 +183,23 @@ public class GenerateFamily {
         return event;
     }
 
-    private String generateLocation() {
-        return null;
+    public Event generateLocation() {
+        File file = new File("C:\\Users\\ChenTing Yu\\IdeaProjects\\FamilyMapService\\json\\locations.json");
+        Event location = new Event();
+
+        try(FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
+            ListOfEvents listOfEvents = gson.fromJson(bufferedReader, ListOfEvents.class);
+            int length = listOfEvents.getData().size();
+            location = listOfEvents.getData().get(random.nextInt(length));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return location;
     }
 
     private void addToDatabase() {

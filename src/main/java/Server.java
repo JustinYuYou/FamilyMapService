@@ -1,5 +1,7 @@
 import com.sun.net.httpserver.HttpServer;
 import handler.*;
+import model.Event;
+import util.GenerateFamily;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -9,6 +11,7 @@ import java.net.InetSocketAddress;
  */
 public class Server {
     public static void main(String[] args){
+
         Server server = new Server();
         int port = 8080;
         try {
