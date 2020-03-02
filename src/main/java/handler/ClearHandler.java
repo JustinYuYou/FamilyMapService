@@ -7,9 +7,7 @@ import com.sun.net.httpserver.HttpHandler;
 import response.ClearResponse;
 import service.ClearService;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 /**

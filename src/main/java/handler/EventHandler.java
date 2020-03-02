@@ -32,30 +32,33 @@ public class EventHandler extends ParentHandler {
                         EventService eventService = new EventService();
                         String respData;
 
-                        if(urlComponent.length == 3) {
+                        if (urlComponent.length == 3) {
                             String eventID = urlComponent[(url.split("/").length - 1)];
-                            SingleEventResponse response = eventService.readSingleEvent(eventID);
+                            SingleEventResponse response = eventService.readSingleEvent(eventID, authToken);
                             respData = new Gson().toJson(response);
+
+                            if (response.isSuccess()) {
+                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+                            } else {
+                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+                            }
                         } else {
                             AllEventResponse response = eventService.readAllEvent(authToken);
                             respData = new Gson().toJson(response);
+
+
+                            if (response.isSuccess()) {
+                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+                            } else {
+                                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+                            }
                         }
-                        // Start sending the HTTP response to the client, starting with
-                        // the status code and any defined headers.
-                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-
-                        // Now that the status code and headers have been sent to the client,
-                        // next we send the JSON data in the HTTP response body.
-
-                        // Get the response body output stream.
                         OutputStream respBody = exchange.getResponseBody();
-
-                        // Write the JSON string to the output stream.
                         writeString(respData, respBody);
-
-                        // Close the output stream.  This is how Java knows we are done
-                        // sending data and the response is complete
                         respBody.close();
                     } else {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);

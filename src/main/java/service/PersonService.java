@@ -22,30 +22,57 @@ import java.util.List;
  * Description: Returns the single Person object with the specified ID.
  */
 public class PersonService {
-    public SinglePersonResponse readSinglePerson(String personID) {
+    public SinglePersonResponse readSinglePerson(String personID, String authTokenString) {
         Database db = new Database();
         PersonDao personDao;
         Person person = null;
 
+        AuthTokenDao authTokenDao;
+        AuthToken authToken;
+
+        SinglePersonResponse singlePersonResponse = null;
+
         try {
-            personDao = new PersonDao(db.openConnection());
-            person = personDao.findPerson(personID);
-            db.closeConnection(true);
+
+            Connection connection = db.openConnection();
+
+            authTokenDao = new AuthTokenDao(connection);
+            authToken = authTokenDao.findAuthToken(authTokenString);
+            boolean isCommit = true;
+
+            if (authToken == null) {
+                singlePersonResponse = new SinglePersonResponse("Error: the authToken is not right", false);
+                isCommit = false;
+            } else {
+                personDao = new PersonDao(connection);
+                person = personDao.findPerson(personID);
+
+                if(person == null) {
+                    singlePersonResponse = new SinglePersonResponse("Error: Invalid personID parameter", false);
+                    isCommit = false;
+                } else if(!authToken.getAssociatedUsername().equals(person.getAssociatedUsername())) {
+                    singlePersonResponse = new SinglePersonResponse("Error: Invalid personID parameter", false);
+                    isCommit = false;
+                } else {
+                    if (person != null) {
+                        singlePersonResponse = new SinglePersonResponse(person.getAssociatedUsername(), person.getPersonID(),
+                                person.getFirstName(), person.getLastName(), person.getGender(), person.getFatherID(),
+                                person.getMotherID(), person.getSpouseID(), true);
+                    } else {
+                        singlePersonResponse = new SinglePersonResponse("Error: Invalid personID parameter", false);
+                    }
+                }
+            }
+            db.closeConnection(isCommit);
         } catch (DataAccessException e) {
-           System.out.println(e);
+            System.out.println(e);
             try {
                 db.closeConnection(false);
             } catch (DataAccessException ex) {
                 ex.printStackTrace();
             }
         }
-        if (person != null) {
-            return new SinglePersonResponse(person.getAssociatedUsername(), person.getPersonID(),
-                    person.getFirstName(), person.getLastName(), person.getGender(), person.getFatherID(),
-                    person.getMotherID(), person.getSpouseID(), true);
-        } else {
-            return new SinglePersonResponse("Invalid personID parameter", false);
-        }
+        return singlePersonResponse;
     }
 
     public AllPersonResponse readAllPerson(String authTokenString) {
@@ -66,16 +93,18 @@ public class PersonService {
             authToken = authTokenDao.findAuthToken(authTokenString);
 
             boolean isCommit = true;
-            if(authToken == null) {
-                allPersonResponse = new AllPersonResponse("Invalid auth token", false);
+            if (authToken == null) {
+                allPersonResponse = new AllPersonResponse("Error: Invalid auth token", false);
+                allPersonResponse.setData(null);
                 isCommit = false;
+
             } else {
                 String username = authToken.getAssociatedUsername();
                 userDao = new UserDao(connection);
                 user = userDao.findUser(username);
 
                 personDao = new PersonDao(connection);
-                allFamilyMembers =personDao.findFamilyMembers(user.getUserName());
+                allFamilyMembers = personDao.findFamilyMembers(user.getUserName());
                 allPersonResponse = new AllPersonResponse(allFamilyMembers, true);
             }
 

@@ -20,6 +20,15 @@ public class Person {
     public Person() {
     }
 
+    public Person(String personID, String associatedUsername,
+                  String firstName, String lastName, String gender) {
+        this.personID = personID;
+        this.associatedUsername = associatedUsername;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+    }
+
     public Person(String personID, String associatedUsername, String firstName, String lastName,
                   String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;

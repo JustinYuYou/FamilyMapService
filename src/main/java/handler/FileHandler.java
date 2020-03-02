@@ -31,8 +31,8 @@ public class FileHandler implements HttpHandler {
             System.out.println(workingDirectory);
 
             if(!file.exists()) {
-                workingDirectory = System.getProperty("user.dir") + "/web/HTML/404.html";
-                file = new File(System.getProperty("user.dir") + "/web/HTML/404.html");
+                workingDirectory = "web/HTML/404.html";
+                file = new File(  "web/HTML/404.html");
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
             } else {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

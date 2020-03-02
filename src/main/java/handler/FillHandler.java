@@ -19,47 +19,44 @@ import java.net.HttpURLConnection;
 public class FillHandler extends ParentHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        System.out.println("We reached here\n");
+        FillResponse fillResponse = null;
         try {
-            if(exchange.getRequestMethod().toUpperCase().equals("POST")) {
+            if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
 
-                Headers reqHeaders = exchange.getRequestHeaders();
-                if (reqHeaders.containsKey("Authorization")) {
+                String url = exchange.getRequestURI().toString();
+                String urlComponent[] = url.split("/");
 
-                    String authToken = reqHeaders.getFirst("Authorization");
-//                    InputStream reqBody = exchange.getRequestBody();
-//                    String reqData = readString(reqBody);
-                    String url = exchange.getRequestURI().toString();
-                    String urlComponent[] = url.split("/");
-                    String username = urlComponent[1];
-                    int generations = Integer.parseInt(urlComponent[2]);
-                    FillRequest r = new FillRequest(username, generations);
+                String username = urlComponent[2];
+                int generations = Integer.parseInt(urlComponent[3]);
+//                if(urlComponent.length == 2) {
+//                    username = urlComponent[1];
+//                }
 
-                    FillService fillService = new FillService();
-                    FillResponse fillResponse = fillService.fill(r);
+                FillRequest r = new FillRequest(username, generations);
+                FillService fillService = new FillService();
+                fillResponse = fillService.fill(r);
 
-                    String respData = new Gson().toJson(fillResponse);
-
+                if (fillResponse.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-                    OutputStream respBody = exchange.getResponseBody();
-
-                    writeString(respData, respBody);
-
-                    respBody.close();
                 } else {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 }
-
             } else {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             }
 
         } catch (IOException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
-
-            exchange.getResponseBody().close();
-
             e.printStackTrace();
+        } finally {
+            String respData = new Gson().toJson(fillResponse);
+
+            OutputStream respBody = exchange.getResponseBody();
+
+            writeString(respData, respBody);
+
+            respBody.close();
         }
     }
 }

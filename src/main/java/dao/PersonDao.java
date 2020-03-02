@@ -157,6 +157,7 @@ public class PersonDao {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
+            System.out.println(e);
             throw new DataAccessException("Error encountered while inserting Person into the database");
         }
     }
@@ -191,6 +192,32 @@ public class PersonDao {
         } catch (SQLException e) {
             System.out.println(e);
             throw new DataAccessException("Unable to delete");
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    public void deleteUserPerson(String username) throws DataAccessException {
+        PreparedStatement stmt = null;
+
+        try {
+            String sql = "delete from Person where associatedUsername = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, username);
+            int count = stmt.executeUpdate();
+
+            System.out.printf("Related %d people are deleted", count);
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            throw new DataAccessException("Unable to delete related persons");
         } finally {
             if (stmt != null) {
                 try {

@@ -39,4 +39,16 @@ public class AllPersonResponse {
     public boolean isSuccess() {
         return success;
     }
+
+    public void setData(List<Person> data) {
+        this.data = data;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 }

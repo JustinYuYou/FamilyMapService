@@ -1,6 +1,7 @@
 package service;
 
-import dao.*;
+import dao.Database;
+import dao.UserDao;
 import databaseAccessException.DataAccessException;
 import model.AuthToken;
 import model.Event;
@@ -9,13 +10,15 @@ import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import response.ClearResponse;
+import request.FillRequest;
+import response.FillResponse;
 
 import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClearServiceTest {
+public class FillServiceTest {
+
     private Database db;
 
     private AuthToken compareAuthToken;
@@ -54,6 +57,15 @@ class ClearServiceTest {
                 345345345,31231, "Taiwan", "Taoyuan", "Birth", 1997);
         compareEvent2 = new Event("111111", "jj2324", "4444",
                 3453453, 346345, "Japan", "Osaka", "Marriage", 1996);
+
+        try {
+            db.openConnection();
+            db.clearTables();
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @AfterEach
@@ -64,66 +76,31 @@ class ClearServiceTest {
     }
 
     @Test
-    public void clearServicePass() throws Exception {
-        Connection conn = null;
-        ClearService clearService = new ClearService();
+    public void fillPass() throws Exception {
 
-        AuthToken a;
-        User u;
-        Person p;
-        Event e;
-
-
-        try {
-            conn = db.openConnection();
-
-            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
-            authTokenDao.insertAuthToken(compareAuthToken);
-
-            UserDao userDao = new UserDao(conn);
-            userDao.insertUser(compareUser);
-            userDao.insertUser(compareUser2);
-
-            PersonDao personDao = new PersonDao(conn);
-            personDao.insertPerson(comparePerson);
-            personDao.insertPerson(comparePerson2);
-
-            EventDao eventDao = new EventDao(conn);
-            eventDao.insertEvent(compareEvent);
-            eventDao.insertEvent(compareEvent2);
-
-            db.closeConnection(true);
-
-        } catch (DataAccessException ex) {
-            db.closeConnection(false);
-        }
-
-        ClearResponse clearResponse = clearService.clear();
-
-        conn = db.openConnection();
-
-        AuthTokenDao authTokenDao = new AuthTokenDao(conn);
-        a = authTokenDao.findAuthToken(compareAuthToken.getAuthToken());
-
+        Connection conn = db.openConnection();
         UserDao userDao = new UserDao(conn);
-        u = userDao.findUser(compareUser.getUserName());
-
-        PersonDao personDao = new PersonDao(conn);
-        p = personDao.findPerson(comparePerson2.getPersonID());
-
-        EventDao eventDao = new EventDao(conn);
-        e = eventDao.findEvent(compareEvent.getEventID());
-
+        userDao.insertUser(user);
         db.closeConnection(true);
 
-        assertEquals(a , null);
-        assertEquals(u , null);
-        assertEquals(p , null);
-        assertEquals(e , null);
 
-        assertTrue(clearResponse.isSuccess());
-        assertNotNull(clearResponse.getMessage());
+        FillService fillService = new FillService();
+        FillRequest fillRequest = new FillRequest(user.getUserName(), 4);
+        FillResponse fillResponse = fillService.fill(fillRequest);
+
+        assertTrue(fillResponse.isSuccess());
+        assertEquals(fillResponse.getMessage(), "Successfully added 31 persons and 91 events to the database.");
+
+
     }
 
+    @Test
+    public void fillFail() throws Exception {
+        FillService fillService = new FillService();
+        FillRequest fillRequest = new FillRequest(user.getUserName(), -1);
+        FillResponse fillResponse = fillService.fill(fillRequest);
 
+        assertFalse(fillResponse.isSuccess());
+        assertNotNull(fillResponse.getMessage());
+    }
 }

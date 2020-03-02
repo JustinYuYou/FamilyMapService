@@ -33,18 +33,31 @@ public class PersonHandler extends ParentHandler {
                     
                     if (urlComponent.length == 3) {
                         String personID = urlComponent[urlComponent.length - 1];
-                        SinglePersonResponse response = personService.readSinglePerson(personID);
+                        SinglePersonResponse response = personService.readSinglePerson(personID, authTokenString);
 
                         respData = new Gson().toJson(response);
+
+                        if(response.isSuccess()) {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+                        } else {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+                        }
                     } else {
                         AllPersonResponse response = personService.readAllPerson(authTokenString);
                         respData = new Gson().toJson(response);
 
+                        if(response.isSuccess()) {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
+                        } else {
+                            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+                        }
+
                     }
-                    // Start sending the HTTP response to the client, starting with
-                    // the status code and any defined headers.
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                    
+
                     // Now that the status code and headers have been sent to the client,
                     // next we send the JSON data in the HTTP response body.
 

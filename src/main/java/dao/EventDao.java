@@ -165,7 +165,7 @@ public class EventDao {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error encountered while inserting Person into the database");
+            throw new DataAccessException("Error encountered while inserting Event into the database");
         }
     }
 
@@ -199,6 +199,32 @@ public class EventDao {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    public void deleteUserEvent(String username) throws DataAccessException {
+        PreparedStatement stmt = null;
+
+        try {
+            String sql = "delete from Event where associatedUsername = ?";
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, username);
+            int count = stmt.executeUpdate();
+
+            System.out.printf("Related %d events are deleted", count);
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            throw new DataAccessException("Unable to delete related event");
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }

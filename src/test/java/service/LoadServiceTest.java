@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import request.LoadRequest;
+import response.LoadResponse;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -107,6 +108,28 @@ class LoadServiceTest {
             e.printStackTrace();
         }
 
+    }
+    @Test
+    public void loadFail() throws Exception {
 
+        LoadService loadTest = new LoadService();
+
+        List<User> users = new ArrayList<>();
+        User user = new User();
+        users.add(user);
+
+        List<Person> persons = new ArrayList<>();
+        persons.add(testPerson);
+        persons.add(testPerson2);
+
+        List<Event> events = new ArrayList<>();
+        events.add(testEvent);
+        events.add(testEvent2);
+
+        LoadRequest r = new LoadRequest(users, persons, events);
+
+        LoadResponse loadResponse = loadTest.load(r);
+
+        assertFalse(loadResponse.isSuccess());
     }
 }

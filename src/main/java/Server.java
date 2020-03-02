@@ -24,13 +24,15 @@ public class Server {
     //HttpServer Creation and Startup
     private void startServer(int port) throws IOException {
         InetSocketAddress serverAddress = new InetSocketAddress(port);
-        HttpServer server = HttpServer.create(serverAddress, 10);
+        HttpServer server = HttpServer.create(serverAddress, 12);
         registerHandlers(server);
         server.start();
         System.out.println("FamilyMapServer listening on port " + port);
     }
 
     private void registerHandlers(HttpServer httpServer) {
+        httpServer.setExecutor(null);
+
         httpServer.createContext("/", new FileHandler());
         httpServer.createContext("/user/register", new RegisterHandler());
         httpServer.createContext("/user/login", new LoginHandler());

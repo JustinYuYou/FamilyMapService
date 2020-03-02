@@ -29,33 +29,33 @@ public class RegisterService {
         Database db = new Database();
         UserDao userDao;
         User user;
-        PersonDao personDao;
-        Person userPerson;
+
         AuthTokenDao authTokenDao;
         AuthToken authToken;
-        List<Person> ancestors = new ArrayList<Person>();
+
         GenerateFamily familyGenerator;
         RegisterResponse registerResponse;
 
         try {
             Connection connection = db.openConnection();
             userDao = new UserDao(connection);
+
             String personID = GenerateRandom.generateRandomString();
             user = new User(r.getUserName(), personID, r.getPassword(), r.getEmail(),
                     r.getFirstName(), r.getLastName(), r.getGender());
             userDao.insertUser(user);
 
-            familyGenerator = new GenerateFamily(user.getUserName());
-            familyGenerator.startGenerating();
-
             authTokenDao = new AuthTokenDao(connection);
             String authTokenString = GenerateRandom.generateRandomString();
             authToken = new AuthToken(authTokenString, user.getUserName());
             authTokenDao.insertAuthToken(authToken);
+            db.closeConnection(true);
+
+            familyGenerator = new GenerateFamily(user);
+            familyGenerator.startGenerating(4);
 
             registerResponse = new RegisterResponse(authTokenString, user.getUserName()
                     , user.getPersonID(), true);
-            db.closeConnection(true);
 
         } catch (DataAccessException e) {
             try {
@@ -64,11 +64,11 @@ public class RegisterService {
                 ex.printStackTrace();
             }
             e.printStackTrace();
-            registerResponse = new RegisterResponse(" Request property missing or has invalid value",
+            registerResponse = new RegisterResponse("Error: Request property missing or has invalid value",
                     false);
         }
 
-        return null;
+        return registerResponse;
     }
 
 

@@ -9,7 +9,6 @@ import model.AuthToken;
 import model.User;
 import request.LoginRequest;
 import response.LoginResponse;
-import util.GenerateEvent;
 import util.GenerateRandom;
 
 import java.sql.Connection;
@@ -33,11 +32,11 @@ public class LoginService {
 
             if(user == null) {
                 db.closeConnection(false);
-                return new LoginResponse("User does not exist", false);
+                return new LoginResponse("Error: User does not exist", false);
             }
             if(!user.getPassword().equals(r.getPassword())) {
                 db.closeConnection(false);
-                return new LoginResponse("Invalid password", false);
+                return new LoginResponse("Error: Invalid password", false);
             }
             authTokenString = GenerateRandom.generateRandomString();
             authTokenDao = new AuthTokenDao(connection);

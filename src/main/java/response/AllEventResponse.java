@@ -36,4 +36,17 @@ public class AllEventResponse {
     public boolean isSuccess() {
         return success;
     }
+
+
+    public void setData(List<Event> data) {
+        this.data = data;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 }
