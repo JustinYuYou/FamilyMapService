@@ -1,0 +1,40 @@
+[Mon Mar 02 16:43:57 MST 2020] - INFO test.java.passoff.ServerTest: 	Setting up Persistence Test...
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Proxy: 	Clear called
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Post without Request Body called
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Connection opened to server
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Request method set to POST
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Do Output set to true
+[Mon Mar 02 16:43:57 MST 2020] - INFO client.Client: 	Connecting to server
+[Mon Mar 02 16:43:59 MST 2020] - INFO test.java.passoff.ServerTest: 	Setting up File Handler Default Test...
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Proxy: 	Clear called
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Post without Request Body called
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Connection opened to server
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Request method set to POST
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Do Output set to true
+[Mon Mar 02 16:43:59 MST 2020] - INFO client.Client: 	Connecting to server
+[Mon Mar 02 16:44:01 MST 2020] - INFO test.java.passoff.ServerTest: 	Setting up Realistic Fill Death Test...
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Proxy: 	Clear called
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Post without Request Body called
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Connection opened to server
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Request method set to POST
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Do Output set to true
+[Mon Mar 02 16:44:01 MST 2020] - INFO client.Client: 	Connecting to server
+[Mon Mar 02 16:44:03 MST 2020] - INFO test.java.passoff.ServerTest: 	Setting up Login Invalid User Test...
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Proxy: 	Clear called
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Post without Request Body called
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Attempting to open connection to server
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Connection opened to server
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Setting request method to POST
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Request method set to POST
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Setting Do Output to true
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Do Output set to true
+[Mon Mar 02 16:44:03 MST 2020] - INFO client.Client: 	Connecting to server
